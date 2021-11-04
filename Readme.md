@@ -25,4 +25,6 @@ Open your gradle.properties file. You will find it here:
     dockerHubUser=youDockerHubUserName
     dockerHubPassword=youDockerHubPassword
 
-Make sure not to insert spaces before of after the equals "=" sign. 
+Make sure not to insert spaces before of after the equals "=" sign.
+
+# Run the setup script
