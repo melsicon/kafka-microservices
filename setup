@@ -1,0 +1,50 @@
+
+path_number_gen_kafka="$HOME/IdeaProjects/kafka-microservices/number-gen-kafka"
+path_number_gen_kafka_2="$HOME/IdeaProjects/kafka-microservices/number-gen-kafka-2"
+path_number_merger_kafka_streams="$HOME/IdeaProjects/kafka-microservices/number-merger-kafka-streams"
+
+services=(
+	$path_number_gen_kafka
+	$path_number_gen_kafka_2
+	$path_number_merger_kafka_streams)
+
+# Check out Repos
+git clone git@github.com:melsicon/number-gen-kafka.git $path_number_gen_kafka
+git clone git@github.com:melsicon/number-gen-kafka-2.git $path_number_gen_kafka_2 
+git clone git@github.com:melsicon/number-merger-kafka-streams.git $path_number_merger_kafka_streams
+
+source $HOME/.gradle/gradle.properties
+dockerHubUsername="$dockerHubUser"
+
+# Build images & push to DockerHub
+for i in "${services[@]}"; do
+  cd "$i"
+  echo "Here we are: $PWD"
+  gradle wrapper
+  ./gradlew clean build jib
+  sed -i -e 's/{{DockerHubUserName}}/'$dockerHubUsername'/g' k8s.yml
+done
+
+
+# Start Zookeeper in new Terminal Window
+osascript -e 'tell app "Terminal"
+   do script "zookeeper-server-start $HOME/IdeaProjects/kafka-microservices/kafka-config/zookeeper.properties"
+end tell'
+
+# Start Kafka-Server in new Terminal Window
+echo "Wait a little bit to let Zookeeper start before Kafka-Broker connects ..."
+sleep 10s
+osascript -e 'tell app "Terminal"
+   do script "kafka-server-start $HOME/IdeaProjects/kafka-microservices/kafka-config/server.properties"
+end tell'
+
+#Alternativ im Hintergund
+#zookeeper-server-start $HOME/IdeaProjects/kafka-microservices/kafka-config/zookeeper.properties >> /dev/null
+#sleep 10s
+#kafka-server-start $HOME/IdeaProjects/kafka-microservices/kafka-config/server.properties >> /dev/null
+
+# Start Kubernetes Pods
+for i in "${services[@]}"; do
+  cd "$i"
+  kubectl apply -f k8s.yml -n dev
+done
