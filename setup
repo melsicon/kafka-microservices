@@ -33,7 +33,7 @@ end tell'
 
 # Start Kafka-Server in new Terminal Window
 echo "Wait a little bit to let Zookeeper start before Kafka-Broker connects ..."
-sleep 10s
+sleep 30
 osascript -e 'tell app "Terminal"
    do script "kafka-server-start $HOME/IdeaProjects/kafka-microservices/kafka-config/server.properties"
 end tell'
@@ -48,3 +48,20 @@ for i in "${services[@]}"; do
   cd "$i"
   kubectl apply -f k8s.yml -n dev
 done
+
+# Open Terminal Consumers for topic "random-number-1-v1" to see what happens
+osascript -e 'tell app "Terminal"
+   do script "kafka-console-consumer --bootstrap-server localhost:9092 --topic random-number-1-v1 --property key=value --property print.key=true --property key.separator=':' "
+end tell'
+
+# Open Terminal Consumers for topic "random-number-2-v1" to see what happens
+osascript -e 'tell app "Terminal"
+   do script "kafka-console-consumer --bootstrap-server localhost:9092 --topic random-number-2-v1 --property key=value --property print.key=true --property key.separator=':' "
+end tell'
+
+# Open Terminal Consumers for topic "merged-topic-v1" to see what happens
+osascript -e 'tell app "Terminal"
+   do script "kafka-console-consumer --bootstrap-server localhost:9092 --topic merged-topic-v1 --property key=value --property print.key=true --property key.separator=':' "
+end tell'
+
+echo "You are all set. Check terminal windows to see the kafka consumers ..."
