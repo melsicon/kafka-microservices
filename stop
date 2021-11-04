@@ -1,0 +1,19 @@
+
+path_number_gen_kafka="$HOME/IdeaProjects/kafka-microservices/number-gen-kafka"
+path_number_gen_kafka_2="$HOME/IdeaProjects/kafka-microservices/number-gen-kafka-2"
+path_number_merger_kafka_streams="$HOME/IdeaProjects/kafka-microservices/number-merger-kafka-streams"
+
+services=(
+	$path_number_gen_kafka
+	$path_number_gen_kafka_2
+	$path_number_merger_kafka_streams)
+
+
+# Stop Kubernetes Pods
+for i in "${services[@]}"; do
+  cd "$i"
+  kubectl delete -n dev -f k8s.yml
+done
+
+zookeeper-server-stop
+kafka-server-stop
