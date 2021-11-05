@@ -26,22 +26,9 @@ for i in "${services[@]}"; do
 done
 
 
-# Start Zookeeper in new Terminal Window
-osascript -e 'tell app "Terminal"
-   do script "zookeeper-server-start $HOME/IdeaProjects/kafka-microservices/kafka-config/zookeeper.properties"
-end tell'
-
-# Start Kafka-Server in new Terminal Window
-echo "Wait a little bit to let Zookeeper start before Kafka-Broker connects ..."
-sleep 30
-osascript -e 'tell app "Terminal"
-   do script "kafka-server-start $HOME/IdeaProjects/kafka-microservices/kafka-config/server.properties"
-end tell'
-
-#Alternativ im Hintergund
-#zookeeper-server-start $HOME/IdeaProjects/kafka-microservices/kafka-config/zookeeper.properties >> /dev/null
-#sleep 10s
-#kafka-server-start $HOME/IdeaProjects/kafka-microservices/kafka-config/server.properties >> /dev/null
+# Start Zookeeper & Kafka Broker in Docker
+cd $HOME/IdeaProjects/kafka-microservices
+docker-compose up -d
 
 # Start Kubernetes Pods
 for i in "${services[@]}"; do

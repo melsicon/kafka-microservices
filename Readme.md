@@ -28,3 +28,4 @@ Open your gradle.properties file. You will find it here:
 Make sure not to insert spaces before of after the equals "=" sign.
 
 ### Run the setup script
+$ ./setup

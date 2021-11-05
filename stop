@@ -15,5 +15,9 @@ for i in "${services[@]}"; do
   kubectl delete -n dev -f k8s.yml
 done
 
-zookeeper-server-stop
-kafka-server-stop
+#Stop Zookeeper & Kafka-Broker
+cd $HOME/IdeaProjects/kafka-microservices/
+docker-compose down
+
+# Delete Stopper Docker Containers
+docker rm -f $(docker ps -a -q)
