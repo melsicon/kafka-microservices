@@ -1,25 +1,32 @@
+
 # Kafka Microservices
 
 BashScript for Mac that clones, builds and runs different Kafka Microservices (Producers & Streams).
 
 
-## Setup on MacOS
+### Setup on MacOS
 
 Install homebrew: https://brew.sh/
 
-# Install Java, Docker, k9s, ...
+### Install Java, Docker, k9s, ...
 
     brew install openjdk k9s kafka gradle kubernetes-cli micronaut
     brew install --cask docker
 
-# Go to DockerHub and setup the following three repos:
+### Go to DockerHub and setup the following three repos:
      number-merger-kafka-streams
      number-gen-kafka
      number-gen-kafka-2
 
-# Edit your Docker Hub Credentials
+### Edit your Docker Hub Credentials
 Open your gradle.properties file. You will find it here:
+    
+
     $HOME/.gradle/gradle.properties
+
+If the file does not exist create it: 
+
+    touch $HOME/.gradle/gradle.properties
 
 ### Insert the following two lines:
     dockerHubUser=youDockerHubUserName
@@ -29,3 +36,6 @@ Make sure not to insert spaces before of after the equals "=" sign.
 
 ### Run the setup script
 $ ./setup
+
+### Stop it when you are done.
+$ ./stop
